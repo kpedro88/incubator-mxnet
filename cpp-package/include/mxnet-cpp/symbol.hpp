@@ -39,7 +39,11 @@
 namespace mxnet {
 namespace cpp {
 inline OpMap*& Symbol::op_map() {
+#ifdef MXNET_THREAD_LOCAL_ENGINE
+  static thread_local OpMap* op_map_ = new OpMap();
+#else
   static OpMap* op_map_ = new OpMap();
+#endif
   return op_map_;
 }
 inline Symbol::Symbol(SymbolHandle handle) {
